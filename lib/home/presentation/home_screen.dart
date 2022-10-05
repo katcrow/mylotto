@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:crow_lotto_creator/home/presentation/lotto_result_screen.dart';
 import 'package:crow_lotto_creator/home/widget/app_circle_number.dart';
 import 'package:flutter/material.dart';
@@ -10,45 +9,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   List<bool> _isChecked = List.filled(45, false);
-  List<int> selectedNumber = List.generate(45, (index) => index + 1);
-
-  //-- 1. animation 선언
-  late AnimationController _controller;
-  late Animation _animation;
-
-  void callAnimation()  {
-    _controller =  AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _animation =  Tween<double>(begin: 1, end: 0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-      reverseCurve: Curves.easeInOut,
-    ));
-
-    //-- animation 감시
-    _controller.addListener(() {
-      setState(() {});
-    });
-
-    _controller.addStatusListener((status)  {
-      if (status == AnimationStatus.completed) {
-        // 종료 시
-         _controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        // 시작 시
-      }
-    });
-  }
-
-  //-- animation 초기화
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    // callAnimation();
-  }
+  List<int> selectedNumber = List.generate(45, (value) => value + 1);
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +48,14 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
                           // 토글
                           _isChecked[index] = !_isChecked[index];
                           if (_isChecked[index]) {
-                            selectedNumber.remove(index);
+                            selectedNumber.remove(index + 1);
                           } else {
-                            selectedNumber.add(index);
+                            selectedNumber.add(index + 1);
                           }
                         });
                       },
                       child: AppCircleNumber(
-                        index: index,
+                        value: index + 1,
                         isChecked: _isChecked[index],
                       ),
                     ),
@@ -105,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
             onTap: () {
               // -- 6개 만드는 함수
               var sixNumberList = sixNumber(selectedNumber);
-
               //-- result page move -> gameCount 매개변수로
               Navigator.push(
                   context,
@@ -141,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
           onPressed: () {
             setState(() {
               _isChecked = List.filled(45, false);
-              selectedNumber = List.generate(45, (index) => index + 1);
+              selectedNumber = List.generate(45, (index) => index);
             });
           },
           child: Icon(Icons.refresh),
@@ -164,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
       }
       gameCount.add(lottoSet.toList()..sort());
     }
-    // print("gameCount : ${gameCount}");
     return gameCount;
   }
 }

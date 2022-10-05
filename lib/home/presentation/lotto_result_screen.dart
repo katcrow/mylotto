@@ -42,19 +42,17 @@ class _LottoResultScreenState extends State<LottoResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ...List.generate(
-                            6,
-                            (i) => resultLottoRow(
-                                  resultValue: widget.lottoResult[index][i].toString(),
-                                )),
-                        SizedBox(
-                          width: 10,
+                          6,
+                          (i) => resultLottoRow(
+                              resultValue: widget.lottoResult[index][i].toString()),
                         ),
+                        SizedBox(width: 10),
                         Row(
                           children: [
-                            Icon(Icons.copy_all),
+                            Icon(Icons.copy_all, color: Colors.black87),
                             SizedBox(width: 5),
                             Container(
-                              child: Text('저장'),
+                              child: Text('저장', style: TextStyle(color: Colors.black87)),
                             ),
                           ],
                         )
@@ -70,9 +68,7 @@ class _LottoResultScreenState extends State<LottoResultScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //-- copy to clipboard
-          Clipboard.setData(
-              // ClipboardData(text: widget.lottoResult.toString())
-              ClipboardData(text: widget.lottoResult.toString())).then(
+          Clipboard.setData(ClipboardData(text: widget.lottoResult.toString())).then(
             (_) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
@@ -87,6 +83,6 @@ class _LottoResultScreenState extends State<LottoResultScreen> {
   }
 
   Widget resultLottoRow({required String resultValue}) {
-    return AppCircleNumber(index: int.parse(resultValue));
+    return AppCircleNumber(value: int.parse(resultValue));
   }
 }

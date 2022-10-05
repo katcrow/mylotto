@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class AppCircleNumber extends StatefulWidget {
-  final int index;
+  final int value;
   final bool isChecked;
   final double height;
   final double width;
 
   const AppCircleNumber({
     Key? key,
-    required this.index,
+    required this.value,
     this.isChecked = false,
-    this.height = 40,
-    this.width = 40,
+    this.height = 45,
+    this.width = 45,
   }) : super(key: key);
 
   @override
@@ -67,11 +66,11 @@ class _AppCircleNumberState extends State<AppCircleNumber>
         height: widget.height,
         width: widget.width,
         decoration: BoxDecoration(
-            color: findBackgroundColor(widget.index, widget.isChecked),
+            color: findBackgroundColor(widget.value, widget.isChecked),
             borderRadius: BorderRadius.circular(30)),
         child: Center(
           child: Text(
-            '${widget.index + 1}',
+            '${widget.value}',
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16,
