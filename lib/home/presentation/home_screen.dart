@@ -10,9 +10,45 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMixin {
   List<bool> _isChecked = List.filled(45, false);
   List<int> selectedNumber = List.generate(45, (index) => index + 1);
+
+  //-- 1. animation 선언
+  late AnimationController _controller;
+  late Animation _animation;
+
+  void callAnimation()  {
+    _controller =  AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _animation =  Tween<double>(begin: 1, end: 0).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+      reverseCurve: Curves.easeInOut,
+    ));
+
+    //-- animation 감시
+    _controller.addListener(() {
+      setState(() {});
+    });
+
+    _controller.addStatusListener((status)  {
+      if (status == AnimationStatus.completed) {
+        // 종료 시
+         _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        // 시작 시
+      }
+    });
+  }
+
+  //-- animation 초기화
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // callAnimation();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(5.0),
                     child: GestureDetector(
                       onTap: () {
-                        // print("Tapped : ${index}");
                         setState(() {
                           // 토글
                           _isChecked[index] = !_isChecked[index];
                           if (_isChecked[index]) {
-                            selectedNumber.remove(index + 1);
+                            selectedNumber.remove(index);
                           } else {
-                            selectedNumber.add(index + 1);
+                            selectedNumber.add(index);
                           }
-                          // print(selectedNumber);
                         });
                       },
                       child: AppCircleNumber(
@@ -70,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
           GestureDetector(
             onTap: () {
               // -- 6개 만드는 함수
-              var sixNumberList = sixNumber();
+              var sixNumberList = sixNumber(selectedNumber);
 
               //-- result page move -> gameCount 매개변수로
               Navigator.push(
@@ -107,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             setState(() {
               _isChecked = List.filled(45, false);
+              selectedNumber = List.generate(45, (index) => index + 1);
             });
           },
           child: Icon(Icons.refresh),
@@ -116,20 +151,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Set<int> sixNumber(){
-  List<List<int>> sixNumber() {
+  List<List<int>> sixNumber(List<int> selectedNumber) {
     // Set<String> list = Set();
     List<List<int>> gameCount = [];
     int count = 5;
-    // selectedNumber - list
+
     for (int i = 0; i < count; i++) {
-      Set<int> lottoSet = Set();
+      Set<int> lottoSet = {};
       while (lottoSet.length < 6) {
-        var randomNumber = Random().nextInt(selectedNumber.length);
-        lottoSet.add(selectedNumber[randomNumber]);
+        var randomNumber = (selectedNumber..shuffle()).first;
+        lottoSet.add(randomNumber);
       }
       gameCount.add(lottoSet.toList()..sort());
     }
-    // print(gameCount);
+    // print("gameCount : ${gameCount}");
     return gameCount;
   }
 }

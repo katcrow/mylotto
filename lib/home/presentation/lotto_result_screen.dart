@@ -42,7 +42,7 @@ class _LottoResultScreenState extends State<LottoResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ...List.generate(
-                            5,
+                            6,
                             (i) => resultLottoRow(
                                   resultValue: widget.lottoResult[index][i].toString(),
                                 )),
@@ -54,7 +54,7 @@ class _LottoResultScreenState extends State<LottoResultScreen> {
                             Icon(Icons.copy_all),
                             SizedBox(width: 5),
                             Container(
-                              child: Text('저장하기'),
+                              child: Text('저장'),
                             ),
                           ],
                         )
