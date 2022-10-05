@@ -77,20 +77,58 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 70,
-                width: double.infinity,
-                color: Colors.red,
-                child: Center(
-                  child: Text(
-                    "생성하기",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        _isChecked = List.filled(45, false);
+                        selectedNumber = List.generate(45, (value) => value + 1);
+                      });
+                    },
+                    child: Container(
+                      height: 70,
+                      width: MediaQuery.of(context).size.width / 2,
+                      color: Colors.blue,
+                      child: Center(
+                        child: Text(
+                          "초기화",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      // -- 6개 만드는 함수
+                      var sixNumberList = sixNumber(selectedNumber);
+                      //-- result page move -> gameCount 매개변수로
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => LottoResultScreen(lottoResult: sixNumberList),
+                          ));
+                    },
+                    child: Container(
+                      height: 70,
+                      width: MediaQuery.of(context).size.width / 2,
+                      color: Colors.red,
+                      child: Center(
+                        child: Text(
+                          "생성하기",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           )
@@ -112,9 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Set<int> sixNumber(){
   List<List<int>> sixNumber(List<int> selectedNumber) {
-    // Set<String> list = Set();
     List<List<int>> gameCount = [];
     int count = 5;
 
